@@ -1,0 +1,368 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <title>Affine Cipher</title>
+    <style>
+        *{
+            font-family: 'Optima', 'sans-serif';            
+
+        }
+        input, textarea{
+            background-color:rgb(233, 231, 231);
+        }
+        form {
+            font-size: 20px;
+            letter-spacing: .05em;
+            list-style-type: none;
+            height: 50%;
+            padding-left: 1em;
+
+        }
+
+        .mandatory {
+            color: red;
+            font-size: 16px;
+            visibility: hidden;
+            display: block;
+
+        }
+
+        main {
+            background-color: white;
+            padding: 15px;
+            margin: auto;
+            width: fit-content;
+            border-radius: 7px;
+            margin-top:25px;
+        }
+
+        header {
+            font-size: 50px;
+            color: #f8f8f8;
+            text-align: center;
+            margin: 0;
+            line-height: 2;
+            display: flex;
+            justify-content: space-around;
+            height: 100px;
+            text-align: center;
+            background-color: #6d5666;
+            font-weight:bold;
+
+           
+        }
+
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #container {
+            background-color: #f8f9f8;
+            height: calc(100vh - 50px);
+            box-sizing: border-box;
+        }
+
+        #button,
+        #button2 {
+            width: 100%;
+            background-color: #6d5666;
+            color: white;
+            border: none;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            font-weight:bold;
+        }
+
+        td.btn input {
+            width: 100%;
+            height: 30px;
+            font-size: 20px;
+            border-color: #f8f9f8;
+            border-radius: 15px;
+        }
+
+
+        #text,
+        #numberA,
+        #numberB,
+        #lblA,
+        #lblB,
+        #button2,
+        #answerTD,
+        #answer,
+        #lbltxt {
+            display: none;
+        }
+
+        /* new */
+        /* Flex -> all Elements will be in same line */
+        /* justify-content :space-around; -> to put space between elements */
+        footer {
+            display: flex;
+            justify-content: space-around;
+            height: 50px;
+            color: #f8f8f8;
+            text-align: center;
+            background-color: #6d5666;
+            font-size: 16px;
+        }
+       
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <header>AFFINE CIPHER</header>
+        <main>
+
+            <form id="ch" name="ch">
+                <table cellpadding="5px">
+                    <tr >
+                        <td style="            font-weight:bold;
+                        ">  Please Choose one Option*
+
+                            <span class="mandatory">
+                                This is required</span>
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="radio" id="enc" name="choice" value="1"> Encryption
+                            <input type="radio" id="dec" name="choice" value="2"> Decryption
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="btn" id="btn1">
+                            <input type="button" id="button" onclick="fun();" value="Submit" />
+                            
+                        </td>
+                       
+
+                    </tr>
+
+                    <tr>
+
+                        <td>
+                            <label id="lbltxt" for="text" style="            font-weight:bold;
+                            ">Text:* </label>
+                            <span class="mandatory">
+                                This is required
+                            </span>
+                            <textarea name="text" id="text" cols="43" rows="3" placeholder="Enter the text here ... "
+                                onblur="capitalCase(this);"></textarea>
+                               
+                        </td>
+                        
+
+                    </tr>
+                    <tr>
+                        <td> <span class="mandatory">
+                               
+                            Enter a number makes GCD(a, 26) = 1 please..</span>
+                            <label id="lblA" for="numberA" style="            font-weight:bold;
+                            ">Value of key a*</label>
+                            <input type="number" name="numberA" min="0" required id="numberA">
+                           
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <span class="mandatory">
+                                
+                                This is required</span><label id="lblB" for="numberB" style="            font-weight:bold;
+                                ">Value of key b*</label>
+                            <input type="number" name="numberB" required id="numberB">
+                           
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="btn">
+                            <input type="button" id="button2" onclick="run();" value="Encode" />
+                           
+                        </td>
+                    </tr>
+                    <tr id="answerTD">
+                        <td>
+                            <label id="answer">Answer: </label>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+        </main>
+    </div>
+    <footer>
+        <p>© 2022 Shuaa, Rana, and Maathir. All Rights Reserved</p>
+    </footer>
+</body>
+<script>
+    alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    var m = 26;
+    function capitalCase(txt) {
+        txt.value = txt.value.toUpperCase();
+
+    }
+    function affine_enc(a, b, pt) {
+        var pt_length = pt.length;
+        var ct = ""
+        for (var i = 0; i < pt_length; i++) {
+            if (pt[i] == " ") {
+                //ct += " ";
+                continue;
+            }
+            var new_idx = (a * alpha.indexOf(pt[i]) + b) % m;
+            while (new_idx < 0) {
+                new_idx += m;
+            }
+            ct += alpha[new_idx];
+        }
+        return ct;
+    }
+    //------------
+    function affine_dec(inv_a, b, ct) {
+        var ct_length = ct.length;
+        pt = "";
+        for (var i = 0; i < ct_length; i++) {
+            if (ct[i] == " ") {
+                pt += " ";
+                continue;
+            }
+            var new_idx = (inv_a) * (alpha.indexOf(ct[i]) - b) % m;
+
+
+            while (new_idx < 0) {
+                new_idx += m;
+            }
+
+            pt += alpha[new_idx];
+        }
+        return pt;
+    }
+    var mand = document.getElementsByClassName("mandatory");
+
+    function fun() {
+
+        var choice = document.ch.choice;
+        for (var i in choice) {
+            if (choice[i].checked) {
+                var cho = choice[i];
+            }
+
+        }
+        if (cho == null) {
+            mand[0].style.visibility = "visible";
+            document.getElementById("numberA").style.display = "none";
+            document.getElementById("numberB").style.display = "none";
+            document.getElementById("lblA").style.display = "none";
+            document.getElementById("lblB").style.display = "none";
+            document.getElementById("lbltxt").style.display = "none";
+        }
+        else {
+            mand[0].style.visibility = "hidden";
+            document.getElementById("numberA").style.display = "inline";
+            document.getElementById("numberB").style.display = "inline";
+            document.getElementById("lblA").style.display = "inline";
+            document.getElementById("lblB").style.display = "inline";
+            document.getElementById("button2").style.display = "block";
+            document.getElementById("lbltxt").style.display = "block";
+            document.getElementById("btn1").innerHTML='<input type="button" id="button" onclick="fun();" value="Submit" /> <hr>';
+
+
+
+            if (cho.value == 1) {
+                document.getElementById("text").style.display = "block";
+                document.getElementById("text").placeholder = 'Enter the plaintext here ...';
+                document.getElementById("button2").value = "Encode"
+                document.getElementById("lbltxt").textContent = "Plaintext* ";
+            } else {
+                document.getElementById("text").style.display = "block";
+                document.getElementById("text").placeholder = 'Enter the ciphertext here ...';
+                document.getElementById("button2").value = "Decode"
+                document.getElementById("lbltxt").textContent = "Ciphertext* ";
+            }
+
+        }
+    }
+
+    function check_keys(a, b) {
+        let gcd = 0;
+        for (let i = 1; i <= a && i <= b; i++) {
+
+            if (a % i == 0 && b % i == 0) {
+                gcd = i;
+            }
+        }
+        return gcd;
+
+    }
+
+    function inverse_a(a) {
+        let right_side = 0;
+        let inv_a = 0;
+        while (right_side != 1 && inv_a < m) {
+            inv_a += 1;
+            right_side = (a * inv_a) % m;
+        }
+        return inv_a;
+    }
+    function isNaN(x) {
+        return x !== x;
+    };
+    function run() {
+        var choice = document.ch.choice;
+        for (var i in choice) {
+            if (choice[i].checked) {
+                var cho = choice[i];
+            }
+
+        }
+        var vlaA = document.getElementById("numberA").valueAsNumber;
+        var vlaB = document.getElementById("numberB").valueAsNumber;
+        var text = document.getElementById("text").value;
+        if (text == "") {
+            mand[1].style.visibility = "visible";
+        } else {
+            mand[1].style.visibility = "hidden";
+            if (!isNaN(vlaA) && !isNaN(vlaB)) {
+                mand[3].style.visibility = "hidden";
+                if (cho.value == 1) {
+                    if (check_keys(vlaA, m) == 1) {
+                        mand[2].style.visibility = "hidden";
+                        var ans = affine_enc(vlaA, vlaB, text);
+                        document.getElementById("answerTD").style.display = "inline";
+                        document.getElementById("answer").style.display = "inline";
+                        document.getElementById("answer").textContent = `Ciphertext is: ${ans}`;
+                    } else {
+                        mand[2].textContent = `Invalid key value, GCD(${vlaA}, 26)!=1`;
+                        mand[2].style.visibility = "visible";
+                    }
+
+
+                } else {
+                    if (check_keys(vlaA, m) == 1) {
+                        mand[2].style.visibility = "hidden";
+                        inv_a = inverse_a(vlaA);
+                        var ans = affine_dec(inv_a, vlaB, text);
+                        document.getElementById("answerTD").style.display = "inline";
+                        document.getElementById("answer").style.display = "inline";
+                        document.getElementById("answer").textContent = `Plaintext is: ${ans}`;
+                    } else {
+                        mand[2].textContent = `Invalid key value, GCD(${vlaA}, 26)!=1`;
+                        mand[2].style.visibility = "visible";
+                    }
+                }
+            } else {
+                mand[2].textContent = "This is required"
+                mand[2].style.visibility = "visible";
+                mand[3].style.visibility = "visible";
+            }
+
+        }
+
+    }
+</script>
+
+</html>
